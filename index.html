@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#8B0000">
+  <meta name="description" content="Calculadora integral para contrataciones públicas - Ley 32069 y DS 009-2025-EF">
+  <title>ContratApp — Calculadora Integral</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png" type="image/png">
+  <style>
+    :root {
+      --rojo: #8B0000;
+      --rojo-oscuro: #6B0000;
+      --rojo-suave: #a01010;
+      --dorado: #C8A84B;
+      --dorado-suave: #dfc070;
+      --crema: #FDF8F0;
+      --gris-fondo: #F5F3EE;
+      --gris-card: #FFFFFF;
+      --gris-borde: #E0D8CC;
+      --gris-texto: #444;
+      --gris-claro: #888;
+      --negro: #1A1008;
+      --verde: #1a6b2a;
+      --azul-link: #1a3a8b;
+      --radio: 10px;
+      --sombra: 0 2px 12px rgba(139,0,0,0.08);
+      --sombra-card: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--gris-fondo);
+      color: var(--negro);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── CABECERA ── */
+    header {
+      background: linear-gradient(135deg, var(--rojo-oscuro) 0%, var(--rojo) 100%);
+      color: white;
+      padding: 16px 20px 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo-marca {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: white;
+      line-height: 1;
+    }
+    .logo-marca span { color: var(--dorado); }
+    .subtitulo-app {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 0.3px;
+      margin-top: 2px;
+    }
+    .ley-badge {
+      margin-left: auto;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(200,168,75,0.5);
+      color: var(--dorado-suave);
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+    }
+
+    /* ── MENÚ DE MÓDULOS ── */
+    #menu-principal {
+      padding: 18px 16px 10px;
+      max-width: 760px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .seccion-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--gris-claro);
+      margin: 14px 0 8px;
+    }
+    .grid-modulos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+      gap: 10px;
+    }
+    .modulo-btn {
+      background: var(--gris-card);
+      border: 1.5px solid var(--gris-borde);
+      border-radius: var(--radio);
+      padding: 14px 12px 12px;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: var(--sombra-card);
+    }
+    .modulo-btn:hover {
+      border-color: var(--rojo);
+      box-shadow: var(--sombra);
+      transform: translateY(-1px);
+    }
+    .modulo-btn:active { transform: translateY(0); }
+    .modulo-icono { font-size: 1.5rem; }
+    .modulo-nombre {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--rojo);
+      line-height: 1.2;
+    }
+    .modulo-art {
+      font-size: 0.63rem;
+      color: var(--gris-claro);
+      margin-top: 2px;
+    }
+
+    /* ── PANEL CALCULADORA ── */
+    #panel-calc {
+      display: none;
+      flex-direction: column;
+      max-width: 760px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 12px 16px 30px;
+    }
+    #panel-calc.activo { display: flex; }
+
+    .btn-volver {
+      background: none;
+      border: none;
+      color: var(--rojo);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 0 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-volver:hover { color: var(--rojo-oscuro); }
+
+    .calc-titulo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--negro);
+      margin: 8px 0 2px;
+    }
+    .calc-norma {
+      font-size: 0.7rem;
+      color: var(--gris-claro);
+      margin-bottom: 14px;
+    }
+
+    /* ── FORMULARIO ── */
+    .form-group {
+      margin-bottom: 14px;
+    }
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gris-texto);
+      margin-bottom: 5px;
+    }
+    label .hint {
+      font-weight: 400;
+      color: var(--gris-claro);
+      font-size: 0.68rem;
+    }
+    input[type="number"], input[type="text"], select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--gris-borde);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: var(--negro);
+      background: white;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    input[type="number"]:focus, input[type="text"]:focus, select:focus {
+      outline: none;
+      border-color: var(--rojo);
+    }
+    select { cursor: pointer; }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* ── BOTÓN CALCULAR ── */
+    .btn-calcular {
+      width: 100%;
+      padding: 13px;
+      background: var(--rojo);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      margin-top: 4px;
+      transition: background 0.15s;
+    }
+    .btn-calcular:hover { background: var(--rojo-oscuro); }
+    .btn-calcular:active { transform: scale(0.99); }
+
+    /* ── RESULTADO ── */
+    .resultado-box {
+      margin-top: 16px;
+      border-radius: var(--radio);
+      overflow: hidden;
+      box-shadow: var(--sombra);
+      display: none;
+    }
+    .resultado-box.visible { display: block; }
+    .resultado-header {
+      background: linear-gradient(135deg, var(--rojo-oscuro), var(--rojo-suave));
+      color: white;
+      padding: 12px 16px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .resultado-cuerpo {
+      background: white;
+      padding: 16px;
+    }
+    .resultado-principal {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--rojo);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .resultado-label {
+      font-size: 0.72rem;
+      color: var(--gris-claro);
+      margin-bottom: 14px;
+    }
+    .detalle-lista {
+      border-top: 1px solid var(--gris-borde);
+      padding-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .detalle-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 0.78rem;
+    }
+    .detalle-item .dk { color: var(--gris-claro); }
+    .detalle-item .dv { font-weight: 600; color: var(--negro); }
+    .detalle-item .dv.destaca { color: var(--rojo); font-size: 0.88rem; }
+    .alerta-box {
+      background: #FFF8E1;
+      border: 1px solid #F5C518;
+      border-radius: 7px;
+      padding: 10px 12px;
+      font-size: 0.73rem;
+      color: #5A4400;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+    .alerta-box.verde {
+      background: #E8F5E9;
+      border-color: #4CAF50;
+      color: #1B5E20;
+    }
+    .alerta-box.roja {
+      background: #FFEBEE;
+      border-color: #F44336;
+      color: #7B1515;
+    }
+
+    /* ── SEPARADORES EN FORMULARIO ── */
+    .form-separator {
+      border: none;
+      border-top: 1px dashed var(--gris-borde);
+      margin: 16px 0 14px;
+    }
+    .form-seccion-titulo {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--dorado);
+      margin-bottom: 12px;
+    }
+
+    /* ── CHIPS RADIO ── */
+    .chips-grupo {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .chip-radio {
+      display: none;
+    }
+    .chip-label {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1.5px solid var(--gris-borde);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gris-texto);
+      cursor: pointer;
+      transition: all 0.15s;
+      background: white;
+    }
+    .chip-radio:checked + .chip-label {
+      background: var(--rojo);
+      border-color: var(--rojo);
+      color: white;
+    }
+
+    /* ── TABLA COMPARATIVA ── */
+    .tabla-resultado {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      margin-top: 12px;
+    }
+    .tabla-resultado th {
+      background: var(--gris-fondo);
+      padding: 7px 10px;
+      text-align: left;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      color: var(--gris-claro);
+      border-bottom: 1px solid var(--gris-borde);
+    }
+    .tabla-resultado td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--gris-borde);
+      color: var(--negro);
+    }
+    .tabla-resultado tr:last-child td { border-bottom: none; }
+    .tabla-resultado td.resalta { font-weight: 700; color: var(--rojo); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--rojo-oscuro);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 14px 20px;
+      font-size: 0.65rem;
+      margin-top: auto;
+    }
+    footer strong { color: var(--dorado); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 480px) {
+      .grid-modulos { grid-template-columns: 1fr 1fr; }
+      .row-2 { grid-template-columns: 1fr; }
+      .resultado-principal { font-size: 1.5rem; }
+    }
+
+    /* Easter egg */
+    #easter { display: none; font-size: 0.6rem; color: transparent; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo-marca">Contrat<span>App</span></div>
+    <div class="subtitulo-app">Calculadora Integral de Contrataciones</div>
+  </div>
+  <div class="ley-badge">Ley 32069 · DS 009-2025-EF</div>
+</header>
+
+<!-- ══ MENÚ PRINCIPAL ══ -->
+<div id="menu-principal">
+
+  <div class="seccion-label">⚖️ Ejecución Contractual</div>
+  <div class="grid-modulos">
+    <button class="modulo-btn" onclick="abrirModulo('penalidad')">
+      <span class="modulo-icono">⏱️</span>
+      <span class="modulo-nombre">Penalidad por Mora</span>
+      <span class="modulo-art">Art. 120 Rgto.</span>
+    </button>
+    <button class="modulo-btn" onclick="abrirModulo('adicionales')">
+      <span class="modulo-icono">➕</span>
+      <span class="modulo-nombre">Prestaciones Adicionales</span>
+      <span class="modulo-art">Art. 64 Ley</span>
+    </button>
+    <button class="modulo-btn" onclick="abrirModulo('complementaria')">
+      <span class="modulo-icono">🔁</span>
+      <span class="modulo-nombre">Contrat. Complementaria</span>
+      <span class="modulo-art">Art. 146 Rgto.</span>
+    </button>
+    <button class="modulo-btn" onclick="abrirModulo('tope-penalidades')">
+      <span class="modulo-icono">🚦</span>
+      <span class="modulo-nombre">Tope de Penalidades</span>
+      <span class="modulo-art">Art. 119 + 229 Rgto.</span>
+    </button>
+  </div>
+
+  <div class="seccion-label">🏦 Garantías y Adelantos</div>
+  <div class="grid-modulos">
+    <button class="modulo-btn" onclick="abrirModulo('fiel-cumplimiento')">
+      <span class="modulo-icono">🛡️</span>
+      <span class="modulo-nombre">Garantía de Fiel Cumplimiento</span>
+      <span class="modulo-art">Art. 113.1 + 138-139</span>
+    </button>
+    <button class="modulo-btn" onclick="abrirModulo('adelantos')">
+      <span class="modulo-icono">💰</span>
+      <span class="modulo-nombre">Adelantos</span>
+      <span class="modulo-art">Art. 178-181 Rgto.</span>
+    </button>
+    <button class="modulo-btn" onclick="abrirModulo('garantia-adelanto')">
+      <span class="modulo-icono">🔒</span>
+      <span class="modulo-nombre">Garantía de Adelanto</span>
+      <span class="modulo-art">Art. 113.3 Rgto.</span>
+    </button>
+  </div>
+
+  <div class="seccion-label">📊 Evaluación de Ofertas</div>
+  <div class="grid-modulos">
+    <button class="modulo-btn" onclick="abrirModulo('puntaje-economico')">
+      <span class="modulo-icono">🏆</span>
+      <span class="modulo-nombre">Puntaje Económico</span>
+      <span class="modulo-art">Art. 74.2 Rgto.</span>
+    </button>
+    <button class="modulo-btn" onclick="abrirModulo('puntaje-total')">
+      <span class="modulo-icono">📐</span>
+      <span class="modulo-nombre">Puntaje Total (Eval. Post.)</span>
+      <span class="modulo-art">Art. 75.3 Rgto.</span>
+    </button>
+    <button class="modulo-btn" onclick="abrirModulo('bonificacion-provincia')">
+      <span class="modulo-icono">📍</span>
+      <span class="modulo-nombre">Bonificación Provincia</span>
+      <span class="modulo-art">Art. 75.6 Rgto.</span>
+    </button>
+  </div>
+
+  <div class="seccion-label">⚠️ Sanciones y Recursos</div>
+  <div class="grid-modulos">
+    <button class="modulo-btn" onclick="abrirModulo('multa-tcp')">
+      <span class="modulo-icono">📋</span>
+      <span class="modulo-nombre">Multa TCP / OECE</span>
+      <span class="modulo-art">Art. 89 Ley</span>
+    </button>
+    <button class="modulo-btn" onclick="abrirModulo('garantia-apelacion')">
+      <span class="modulo-icono">📝</span>
+      <span class="modulo-nombre">Garantía de Apelación</span>
+      <span class="modulo-art">Art. 73.2 Ley</span>
+    </button>
+    <button class="modulo-btn" onclick="abrirModulo('intereses-mora')">
+      <span class="modulo-icono">📈</span>
+      <span class="modulo-nombre">Intereses por Pago Tardío</span>
+      <span class="modulo-art">Art. 67.5 Ley</span>
+    </button>
+  </div>
+
+  <div class="seccion-label">🏗️ Obras</div>
+  <div class="grid-modulos">
+    <button class="modulo-btn" onclick="abrirModulo('supervisor-mora')">
+      <span class="modulo-icono">👷</span>
+      <span class="modulo-nombre">Costo Supervisor por Mora</span>
+      <span class="modulo-art">Art. 210.5 Rgto.</span>
+    </button>
+    <button class="modulo-btn" onclick="abrirModulo('resolucion-obra')">
+      <span class="modulo-icono">🔨</span>
+      <span class="modulo-nombre">Resolución de Contrato Obra</span>
+      <span class="modulo-art">Art. 123 Rgto.</span>
+    </button>
+  </div>
+
+</div>
+
+<!-- ══ PANEL DE CALCULADORA ══ -->
+<div id="panel-calc">
+  <button class="btn-volver" onclick="volverMenu()">← Volver al menú</button>
+  <div id="contenido-calc"></div>
+</div>
+
+<footer>
+  <strong>ContratApp</strong> · Ley General de Contrataciones Públicas Nº 32069 · DS 009-2025-EF<br>
+  Herramienta de apoyo. Verifique siempre la norma vigente.
+  <span id="easter">💛 Hecho con amor por Víctor Siu · Para Cindy, Andrés y Abril</span>
+</footer>
+
+<script>
+  // ═══════════════════════════════════════════════════
+  //  UTILIDADES
+  // ═══════════════════════════════════════════════════
+  const UIT_2025 = 5350; // UIT vigente 2025
+
+  function fmt(n, dec = 2) {
+    if (isNaN(n) || n === null) return '—';
+    return 'S/ ' + n.toLocaleString('es-PE', {minimumFractionDigits: dec, maximumFractionDigits: dec});
+  }
+  function fmtN(n, dec = 2) {
+    if (isNaN(n) || n === null) return '—';
+    return n.toLocaleString('es-PE', {minimumFractionDigits: dec, maximumFractionDigits: dec});
+  }
+  function fmtPct(n) { return fmtN(n, 4) + '%'; }
+  function uit(n) { return 'UIT ' + fmtN(n, 2); }
+
+  function val(id) { return parseFloat(document.getElementById(id)?.value) || 0; }
+  function selVal(id) { return document.getElementById(id)?.value || ''; }
+  function checkedRadio(name) {
+    const el = document.querySelector(`input[name="${name}"]:checked`);
+    return el ? el.value : null;
+  }
+
+  function mostrarResultado(html) {
+    const box = document.getElementById('resultado-dinamico');
+    if (box) { box.innerHTML = html; box.classList.add('visible'); }
+  }
+  function ocultarResultado() {
+    const box = document.getElementById('resultado-dinamico');
+    if (box) { box.innerHTML = ''; box.classList.remove('visible'); }
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  NAVEGACIÓN
+  // ═══════════════════════════════════════════════════
+  function abrirModulo(id) {
+    document.getElementById('menu-principal').style.display = 'none';
+    const panel = document.getElementById('panel-calc');
+    panel.classList.add('activo');
+    panel.scrollIntoView({behavior: 'smooth', block: 'start'});
+    const cont = document.getElementById('contenido-calc');
+    cont.innerHTML = getModuloHTML(id);
+    // Init Konami
+    initKonami();
+  }
+
+  function volverMenu() {
+    document.getElementById('menu-principal').style.display = 'block';
+    document.getElementById('panel-calc').classList.remove('activo');
+    document.getElementById('contenido-calc').innerHTML = '';
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  MÓDULOS HTML
+  // ═══════════════════════════════════════════════════
+  function getModuloHTML(id) {
+    const modulos = {
+
+      // ──────────────────────────────────────────────
+      'penalidad': `
+        <h2 class="calc-titulo">⏱️ Penalidad por Mora</h2>
+        <p class="calc-norma">Art. 120 DS 009-2025-EF (Reglamento)</p>
+        <div class="form-group">
+          <label>Tipo de contrato</label>
+          <div class="chips-grupo">
+            <input type="radio" class="chip-radio" name="tipo_pen" id="pen_bs" value="bs" checked>
+            <label class="chip-label" for="pen_bs">Bienes / Servicios</label>
+            <input type="radio" class="chip-radio" name="tipo_pen" id="pen_obra" value="obra">
+            <label class="chip-label" for="pen_obra">Obras</label>
+            <input type="radio" class="chip-radio" name="tipo_pen" id="pen_co" value="co">
+            <label class="chip-label" for="pen_co">Consultoría Obra</label>
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label>Monto vigente del contrato <span class="hint">(S/)</span></label>
+            <input type="number" id="pen_monto" placeholder="0.00" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>Plazo vigente <span class="hint">(días calendario)</span></label>
+            <input type="number" id="pen_plazo" placeholder="0" min="1" step="1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Días de atraso imputables al contratista</label>
+          <input type="number" id="pen_dias" placeholder="0" min="0" step="1">
+        </div>
+        <button class="btn-calcular" onclick="calcPenalidad()">Calcular penalidad</button>
+        <div class="resultado-box" id="resultado-dinamico"></div>
+      `,
+
+      // ──────────────────────────────────────────────
+      'adicionales': `
+        <h2 class="calc-titulo">➕ Prestaciones Adicionales</h2>
+        <p class="calc-norma">Art. 64 Ley 32069 · Art. 141 / 194-196 Rgto.</p>
+        <div class="form-group">
+          <label>Tipo de contrato</label>
+          <div class="chips-grupo">
+            <input type="radio" class="chip-radio" name="tipo_adic" id="ad_bs" value="bs" checked>
+            <label class="chip-label" for="ad_bs">Bienes / Servicios</label>
+            <input type="radio" class="chip-radio" name="tipo_adic" id="ad_obra" value="obra">
+            <label class="chip-label" for="ad_obra">Obras</label>
+            <input type="radio" class="chip-radio" name="tipo_adic" id="ad_co" value="co">
+            <label class="chip-label" for="ad_co">Consultoría Obra</label>
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label>Monto del contrato original <span class="hint">(S/)</span></label>
+            <input type="number" id="ad_original" placeholder="0.00" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>Adicionales previos aprobados <span class="hint">(S/)</span></label>
+            <input type="number" id="ad_previos" value="0" min="0" step="0.01">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Deductivos vinculados acumulados <span class="hint">(S/) — solo obras</span></label>
+          <input type="number" id="ad_deductivos" value="0" min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>Monto del adicional que se quiere aprobar <span class="hint">(S/)</span></label>
+          <input type="number" id="ad_nuevo" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <button class="btn-calcular" onclick="calcAdicionales()">Verificar adicional</button>
+        <div class="resultado-box" id="resultado-dinamico"></div>
+      `,
+
+      // ──────────────────────────────────────────────
+      'complementaria': `
+        <h2 class="calc-titulo">🔁 Contratación Complementaria</h2>
+        <p class="calc-norma">Art. 146 DS 009-2025-EF (Reglamento)</p>
+        <div class="form-group">
+          <label>Monto del contrato original <span class="hint">(S/)</span></label>
+          <input type="number" id="comp_original" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>Monto de la complementaria que se desea suscribir <span class="hint">(S/)</span></label>
+          <input type="number" id="comp_nuevo" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <button class="btn-calcular" onclick="calcComplementaria()">Verificar complementaria</button>
+        <div class="resultado-box" id="resultado-dinamico"></div>
+      `,
+
+      // ──────────────────────────────────────────────
+      'tope-penalidades': `
+        <h2 class="calc-titulo">🚦 Tope de Penalidades</h2>
+        <p class="calc-norma">Art. 119 + Art. 229 DS 009-2025-EF (Reglamento)</p>
+        <div class="form-group">
+          <label>Tipo de contrato</label>
+          <div class="chips-grupo">
+            <input type="radio" class="chip-radio" name="tipo_tope" id="tp_normal" value="normal" checked>
+            <label class="chip-label" for="tp_normal">Regular</label>
+            <input type="radio" class="chip-radio" name="tipo_tope" id="tp_menor" value="menor">
+            <label class="chip-label" for="tp_menor">Contrato Menor</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Monto del contrato <span class="hint">(S/)</span></label>
+          <input type="number" id="tope_monto" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>Penalidades acumuladas aplicadas <span class="hint">(S/)</span></label>
+          <input type="number" id="tope_acum" value="0" min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>Nueva penalidad por aplicar <span class="hint">(S/)</span></label>
+          <input type="number" id="tope_nueva" value="0" min="0" step="0.01">
+        </div>
+        <button class="btn-calcular" onclick="calcTopePenalidades()">Verificar tope</button>
+        <div class="resultado-box" id="resultado-dinamico"></div>
+      `,
+
+      // ──────────────────────────────────────────────
+      'fiel-cumplimiento': `
+        <h2 class="calc-titulo">🛡️ Garantía de Fiel Cumplimiento</h2>
+        <p class="calc-norma">Art. 113.1 · Art. 138-139 DS 009-2025-EF</p>
+        <div class="form-group">
+          <label>Tipo de contrato</label>
+          <div class="chips-grupo">
+            <input type="radio" class="chip-radio" name="tipo_gfc" id="gfc_bs" value="bs" checked>
+            <label class="chip-label" for="gfc_bs">Bienes / Servicios</label>
+            <input type="radio" class="chip-radio" name="tipo_gfc" id="gfc_obra" value="obra">
+            <label class="chip-label" for="gfc_obra">Obra / Cons. Obra</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>¿Es MYPE? <span class="hint">(micro o pequeña empresa)</span></label>
+          <div class="chips-grupo">
+            <input type="radio" class="chip-radio" name="es_mype_gfc" id="gfc_mype_no" value="no" checked>
+            <label class="chip-label" for="gfc_mype_no">No</label>
+            <input type="radio" class="chip-radio" name="es_mype_gfc" id="gfc_mype_si" value="si">
+            <label class="chip-label" for="gfc_mype_si">Sí</label>
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label>Monto del contrato original <span class="hint">(S/)</span></label>
+            <input type="number" id="gfc_monto" placeholder="0.00" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>UIT vigente <span class="hint">(S/)</span></label>
+            <input type="number" id="gfc_uit" value="${UIT_2025}" min="1" step="1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>¿Incluye prestaciones accesorias? <span class="hint">(mantenimiento, reparación, etc.)</span></label>
+          <div class="chips-grupo">
+            <input type="radio" class="chip-radio" name="tiene_accesoria" id="gfc_acc_no" value="no" checked>
+            <label class="chip-label" for="gfc_acc_no">No</label>
+            <input type="radio" class="chip-radio" name="tiene_accesoria" id="gfc_acc_si" value="si">
+            <label class="chip-label" for="gfc_acc_si">Sí</label>
+          </div>
+        </div>
+        <div class="form-group" id="grupo_monto_acc" style="display:none">
+          <label>Monto de la prestación accesoria <span class="hint">(S/)</span></label>
+          <input type="number" id="gfc_monto_acc" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <button class="btn-calcular" onclick="calcFielCumplimiento()">Calcular garantía</button>
+        <div class="resultado-box" id="resultado-dinamico"></div>
+        <script>
+          document.querySelectorAll('input[name="tiene_accesoria"]').forEach(r => {
+            r.addEventListener('change', function() {
+              document.getElementById('grupo_monto_acc').style.display =
+                this.value === 'si' ? 'block' : 'none';
+            });
+          });
+        <\/script>
+      `,
+
+      // ──────────────────────────────────────────────
+      'adelantos': `
+        <h2 class="calc-titulo">💰 Adelantos</h2>
+        <p class="calc-norma">Art. 137 · Art. 178-181 DS 009-2025-EF</p>
+        <div class="form-group">
+          <label>Tipo de contrato / sistema de entrega</label>
+          <select id="adel_tipo">
+            <option value="obra_sc">Obra — Solo Construcción</option>
+            <option value="obra_dc_disenio">Obra Diseño+Const. — Componente Diseño</option>
+            <option value="obra_dc_obra">Obra Diseño+Const. — Componente Obra</option>
+            <option value="co">Consultoría de Obra</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Monto del contrato original del componente <span class="hint">(S/)</span></label>
+          <input type="number" id="adel_monto" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <button class="btn-calcular" onclick="calcAdelantos()">Ver topes de adelantos</button>
+        <div class="resultado-box" id="resultado-dinamico"></div>
+      `,
+
+      // ──────────────────────────────────────────────
+      'garantia-adelanto': `
+        <h2 class="calc-titulo">🔒 Garantía de Adelanto</h2>
+        <p class="calc-norma">Art. 113.3 DS 009-2025-EF</p>
+        <div class="form-group">
+          <label>Monto del adelanto a otorgar <span class="hint">(S/)</span></label>
+          <input type="number" id="gadel_monto" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>Monto amortizado a la fecha <span class="hint">(S/) — para reducción proporcional</span></label>
+          <input type="number" id="gadel_amort" value="0" min="0" step="0.01">
+        </div>
+        <button class="btn-calcular" onclick="calcGarantiaAdelanto()">Calcular</button>
+        <div class="resultado-box" id="resultado-dinamico"></div>
+      `,
+
+      // ──────────────────────────────────────────────
+      'puntaje-economico': `
+        <h2 class="calc-titulo">🏆 Puntaje de Oferta Económica</h2>
+        <p class="calc-norma">Art. 74.2 DS 009-2025-EF · Fórmula: Po = Mb × Pmax / Mo</p>
+        <div class="form-group">
+          <label>Puntaje máximo económico <span class="hint">(puntos — máx. 40, salvo excepciones)</span></label>
+          <input type="number" id="pe_pmax" value="40" min="1" max="100" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>Monto de la oferta más baja (Mb) <span class="hint">(S/)</span></label>
+          <input type="number" id="pe_mb" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>Monto de la oferta a evaluar (Mo) <span class="hint">(S/)</span></label>
+          <input type="number" id="pe_mo" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <p style="font-size:0.7rem;color:var(--gris-claro);margin-bottom:12px;">
+          ✏️ Para comparar múltiples postores, calcule uno a la vez con el mismo Mb.
+        </p>
+        <button class="btn-calcular" onclick="calcPuntajeEco()">Calcular puntaje</button>
+        <div class="resultado-box" id="resultado-dinamico"></div>
+      `,
+
+      // ──────────────────────────────────────────────
+      'puntaje-total': `
+        <h2 class="calc-titulo">📐 Puntaje Total (Evaluación Posterior)</h2>
+        <p class="calc-norma">Art. 75.3 DS 009-2025-EF · PTP = C1·Pt + C2·Pe</p>
+        <div class="row-2">
+          <div class="form-group">
+            <label>Puntaje técnico (Pt) <span class="hint">(0–100)</span></label>
+            <input type="number" id="pt_tecnico" placeholder="0.00" min="0" max="100" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>Puntaje económico (Pe) <span class="hint">(0–100)</span></label>
+            <input type="number" id="pt_economico" placeholder="0.00" min="0" max="100" step="0.01">
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label>Coef. técnico C1 <span class="hint">(suma con C2 = 1)</span></label>
+            <input type="number" id="pt_c1" value="0.60" min="0" max="1" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>Coef. económico C2</label>
+            <input type="number" id="pt_c2" value="0.40" min="0" max="1" step="0.01">
+          </div>
+        </div>
+        <button class="btn-calcular" onclick="calcPuntajeTotal()">Calcular PTP</button>
+        <div class="resultado-box" id="resultado-dinamico"></div>
+      `,
+
+      // ──────────────────────────────────────────────
+      'bonificacion-provincia': `
+        <h2 class="calc-titulo">📍 Bonificación por Provincia</h2>
+        <p class="calc-norma">Art. 75.6 DS 009-2025-EF — 10% sobre puntaje total</p>
+        <div class="form-group">
+          <label>Objeto del contrato</label>
+          <div class="chips-grupo">
+            <input type="radio" class="chip-radio" name="tipo_bonif" id="bon_serv" value="serv" checked>
+            <label class="chip-label" for="bon_serv">Servicios / Consultoría</label>
+            <input type="radio" class="chip-radio" name="tipo_bonif" id="bon_obra" value="obra">
+            <label class="chip-label" for="bon_obra">Obras</label>
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label>Cuantía del contrato <span class="hint">(S/)</span></label>
+            <input type="number" id="bon_cuantia" placeholder="0.00" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>Puntaje total del postor <span class="hint">(sin bonificación)</span></label>
+            <input type="number" id="bon_puntaje" placeholder="0.00" min="0" max="100" step="0.01">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>¿El postor tiene domicilio en la provincia de ejecución o colindante?</label>
+          <div class="chips-grupo">
+            <input type="radio" class="chip-radio" name="tiene_dom" id="bon_dom_si" value="si" checked>
+            <label class="chip-label" for="bon_dom_si">Sí</label>
+            <input type="radio" class="chip-radio" name="tiene_dom" id="bon_dom_no" value="no">
+            <label class="chip-label" for="bon_dom_no">No</label>
+          </div>
+        </div>
+        <button class="btn-calcular" onclick="calcBonificacion()">Verificar bonificación</button>
+        <div class="resultado-box" id="resultado-dinamico"></div>
+      `,
+
+      // ──────────────────────────────────────────────
+      'multa-tcp': `
+        <h2 class="calc-titulo">📋 Multa TCP / OECE</h2>
+        <p class="calc-norma">Art. 89 Ley 32069 · Tablas graduación Rgto.</p>
+        <div class="form-group">
+          <label>Tipo de proveedor</label>
+          <div class="chips-grupo">
+            <input type="radio" class="chip-radio" name="tipo_prov" id="tp_gen" value="general" checked>
+            <label class="chip-label" for="tp_gen">General</label>
+            <input type="radio" class="chip-radio" name="tipo_prov" id="tp_mype" value="mype">
+            <label class="chip-label" for="tp_mype">MYPE</label>
+            <input type="radio" class="chip-radio" name="tipo_prov" id="tp_cm" value="menor">
+            <label class="chip-label" for="tp_cm">Contrato Menor</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tipo de infracción</label>
+          <div class="chips-grupo">
+            <input type="radio" class="chip-radio" name="tipo_inf" id="inf_abcd" value="abcde" checked>
+            <label class="chip-label" for="inf_abcd">Lits. a), b), c), d), e)</label>
+            <input type="radio" class="chip-radio" name="tipo_inf" id="inf_fgh" value="fgh">
+            <label class="chip-label" for="inf_fgh">Lits. f), g), h)</label>
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label>Monto oferta / contrato <span class="hint">(S/) — si existe</span></label>
+            <input type="number" id="mt_contrato" placeholder="0.00" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>UIT vigente <span class="hint">(S/)</span></label>
+            <input type="number" id="mt_uit" value="${UIT_2025}" min="1" step="1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>¿Pago dentro del plazo (descuento 30%)? <span class="hint">Art. 89.6</span></label>
+          <div class="chips-grupo">
+            <input type="radio" class="chip-radio" name="pronto_pago" id="pp_no" value="no" checked>
+            <label class="chip-label" for="pp_no">No</label>
+            <input type="radio" class="chip-radio" name="pronto_pago" id="pp_si" value="si">
+            <label class="chip-label" for="pp_si">Sí (30% dto.)</label>
+          </div>
+        </div>
+        <button class="btn-calcular" onclick="calcMultaTCP()">Ver rangos de multa</button>
+        <div class="resultado-box" id="resultado-dinamico"></div>
+      `,
+
+      // ──────────────────────────────────────────────
+      'garantia-apelacion': `
+        <h2 class="calc-titulo">📝 Garantía de Recurso de Apelación</h2>
+        <p class="calc-norma">Art. 73.2 Ley 32069 (texto vigente desde 01/01/2025)</p>
+        <div class="form-group">
+          <label>¿Es MYPE?</label>
+          <div class="chips-grupo">
+            <input type="radio" class="chip-radio" name="mype_ap" id="ap_no" value="no" checked>
+            <label class="chip-label" for="ap_no">No</label>
+            <input type="radio" class="chip-radio" name="mype_ap" id="ap_si" value="si">
+            <label class="chip-label" for="ap_si">Sí (MYPE)</label>
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label>Cuantía del procedimiento / ítem a impugnar <span class="hint">(S/)</span></label>
+            <input type="number" id="ap_cuantia" placeholder="0.00" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>UIT vigente <span class="hint">(S/)</span></label>
+            <input type="number" id="ap_uit" value="${UIT_2025}" min="1" step="1">
+          </div>
+        </div>
+        <button class="btn-calcular" onclick="calcGarantiaApelacion()">Calcular garantía</button>
+        <div class="resultado-box" id="resultado-dinamico"></div>
+      `,
+
+      // ──────────────────────────────────────────────
+      'intereses-mora': `
+        <h2 class="calc-titulo">📈 Intereses por Pago Tardío</h2>
+        <p class="calc-norma">Art. 67.5 Ley 32069 — Interés legal (BCRP)</p>
+        <div class="form-group">
+          <label>Monto de la valorización / factura impaga <span class="hint">(S/)</span></label>
+          <input type="number" id="int_monto" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label>Tasa de interés legal <span class="hint">(% anual — consultar BCRP)</span></label>
+            <input type="number" id="int_tasa" placeholder="Ej: 3.5" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>Días de demora en el pago</label>
+            <input type="number" id="int_dias" placeholder="0" min="0" step="1">
+          </div>
+        </div>
+        <div class="alerta-box">
+          ℹ️ La tasa de interés legal la fija el BCRP. Consúltela en <strong>bcrp.gob.pe</strong> antes de usar.
+        </div>
+        <button class="btn-calcular" onclick="calcIntereses()" style="margin-top:12px">Calcular intereses</button>
+        <div class="resultado-box" id="resultado-dinamico"></div>
+      `,
+
+      // ──────────────────────────────────────────────
+      'supervisor-mora': `
+        <h2 class="calc-titulo">👷 Costo de Supervisor por Mora del Ejecutor</h2>
+        <p class="calc-norma">Art. 210.5 DS 009-2025-EF</p>
+        <p style="font-size:0.75rem;color:var(--gris-claro);margin-bottom:12px;">
+          Cuando el contratista ejecutor incurre en atrasos imputables que prolongan la supervisión, 
+          asume el costo del mayor tiempo de la supervisión.
+        </p>
+        <div class="form-group">
+          <label>Monto mensual de la supervisión (contrato vigente) <span class="hint">(S/)</span></label>
+          <input type="number" id="sup_mensual" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>Meses adicionales de supervisión por mora del ejecutor</label>
+          <input type="number" id="sup_meses" placeholder="0" min="0" step="0.5">
+        </div>
+        <button class="btn-calcular" onclick="calcSupervisorMora()">Calcular</button>
+        <div class="resultado-box" id="resultado-dinamico"></div>
+      `,
+
+      // ──────────────────────────────────────────────
+      'resolucion-obra': `
+        <h2 class="calc-titulo">🔨 Resolución de Contrato de Obra</h2>
+        <p class="calc-norma">Art. 123 DS 009-2025-EF — Efectos económicos</p>
+        <div class="form-group">
+          <label>¿Por qué parte se resuelve?</label>
+          <div class="chips-grupo">
+            <input type="radio" class="chip-radio" name="res_parte" id="res_contratista" value="contratista" checked>
+            <label class="chip-label" for="res_contratista">Por incumplimiento del contratista</label>
+            <input type="radio" class="chip-radio" name="res_parte" id="res_entidad" value="entidad">
+            <label class="chip-label" for="res_entidad">Por causas atribuibles a la entidad</label>
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label>Monto del contrato original <span class="hint">(S/)</span></label>
+            <input type="number" id="res_original" placeholder="0.00" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>% de avance físico ejecutado <span class="hint">(%)</span></label>
+            <input type="number" id="res_avance" placeholder="0.00" min="0" max="100" step="0.01">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Utilidad pactada <span class="hint">(%) — figura en presupuesto de obra</span></label>
+          <input type="number" id="res_utilidad" placeholder="Ej: 10" min="0" step="0.01">
+        </div>
+        <button class="btn-calcular" onclick="calcResolucion()">Calcular efectos</button>
+        <div class="resultado-box" id="resultado-dinamico"></div>
+      `,
+    };
+    return (modulos[id] || '<p>Módulo no encontrado.</p>') +
+      (id !== 'intereses-mora' ? '' : '');
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  FUNCIONES DE CÁLCULO
+  // ═══════════════════════════════════════════════════
+
+  // ── 1. PENALIDAD POR MORA ──
+  function calcPenalidad() {
+    const tipo = checkedRadio('tipo_pen') || 'bs';
+    const monto = val('pen_monto');
+    const plazo = val('pen_plazo');
+    const dias = val('pen_dias');
+    if (!monto || !plazo) { alert('Ingresa monto y plazo del contrato.'); return; }
+
+    let F, descF;
+    if (tipo === 'bs') {
+      F = 0.40; descF = 'Bienes/Servicios: F = 0.40';
+    } else if (tipo === 'obra') {
+      if (plazo <= 60) { F = 0.40; descF = 'Obra ≤ 60 días: F = 0.40'; }
+      else if (plazo <= 120) { F = 0.25; descF = 'Obra 61–120 días: F = 0.25'; }
+      else { F = 0.15; descF = 'Obra > 120 días: F = 0.15'; }
+    } else {
+      if (plazo <= 60) { F = 0.40; descF = 'Cons. Obra ≤ 60 días: F = 0.40'; }
+      else { F = 0.25; descF = 'Cons. Obra > 60 días: F = 0.25'; }
+    }
+    const pd = (0.10 * monto) / (F * plazo);
+    const total = pd * dias;
+    const topeMax = monto * 0.10;
+    const restante = Math.max(0, topeMax - total);
+    const superado = total > topeMax;
+
+    mostrarResultado(`
+      <div class="resultado-header">RESULTADO — PENALIDAD POR MORA</div>
+      <div class="resultado-cuerpo">
+        <div class="resultado-principal">${fmt(pd)}</div>
+        <div class="resultado-label">por día de atraso</div>
+        <div class="detalle-lista">
+          <div class="detalle-item"><span class="dk">Fórmula aplicada</span><span class="dv">0.10 × ${fmt(monto, 0)} / (${F} × ${plazo})</span></div>
+          <div class="detalle-item"><span class="dk">Factor F</span><span class="dv">${descF}</span></div>
+          <div class="detalle-item"><span class="dk">Días de atraso</span><span class="dv">${dias} días</span></div>
+          <div class="detalle-item"><span class="dk">Penalidad total acumulada</span><span class="dv destaca">${fmt(total)}</span></div>
+          <div class="detalle-item"><span class="dk">Tope máximo (10% contrato)</span><span class="dv">${fmt(topeMax)}</span></div>
+          <div class="detalle-item"><span class="dk">Margen disponible</span><span class="dv">${superado ? '0.00 (SUPERADO)' : fmt(restante)}</span></div>
+        </div>
+        ${superado ? `<div class="alerta-box roja">⚠️ <strong>Tope superado.</strong> La penalidad total excede el 10% del monto contractual (${fmt(topeMax)}). La entidad puede resolver el contrato por incumplimiento.</div>` : ''}
+        ${!superado && restante < pd * 5 ? `<div class="alerta-box">⚡ <strong>Atención:</strong> Al ritmo actual se alcanzará el tope en ≈ ${Math.floor(restante/pd)} días más.</div>` : ''}
+      </div>
+    `);
+  }
+
+  // ── 2. PRESTACIONES ADICIONALES ──
+  function calcAdicionales() {
+    const tipo = checkedRadio('tipo_adic') || 'bs';
+    const original = val('ad_original');
+    const previos = val('ad_previos');
+    const deductivos = val('ad_deductivos');
+    const nuevo = val('ad_nuevo');
+    if (!original) { alert('Ingresa el monto del contrato original.'); return; }
+
+    let filas = '';
+    let alertas = [];
+
+    if (tipo === 'bs') {
+      // Art. 141 Rgto.: AGA puede aprobar hasta 25%
+      const lim25 = original * 0.25;
+      const usado = previos;
+      const disp = lim25 - usado;
+      const ok = nuevo <= disp;
+      filas = `
+        <tr><td>Monto contrato original</td><td>${fmt(original)}</td></tr>
+        <tr><td>Límite 25% (AGA)</td><td>${fmt(lim25)}</td></tr>
+        <tr><td>Adicionales previos</td><td>${fmt(usado)}</td></tr>
+        <tr><td>Margen disponible</td><td class="${ok ? '' : 'resalta'}">${fmt(disp)}</td></tr>
+        <tr><td>Adicional solicitado</td><td>${fmt(nuevo)}</td></tr>
+        <tr><td>¿Procede sin autorización especial?</td><td class="resalta">${ok ? '✅ Sí (dentro del 25%)' : '❌ No (excede límite AGA)'}</td></tr>
+      `;
+    } else if (tipo === 'obra') {
+      // Art. 64 Ley
+      const lim15 = original * 0.15 - deductivos;
+      const lim30 = original * 0.30 - deductivos;
+      const lim50 = original * 0.50 - deductivos;
+      const limConjunto = original * 0.50;
+      const acumTotal = previos + nuevo;
+      const netoPrev = previos - deductivos;
+      const netoNuevo = (previos + nuevo) - deductivos;
+
+      let nivel = '';
+      if (netoNuevo <= original * 0.15) nivel = '✅ AGA puede aprobar (≤ 15%)';
+      else if (netoNuevo <= original * 0.30) nivel = '⚠️ Requiere Titular de Entidad (>15% y ≤30%)';
+      else if (netoNuevo <= original * 0.50) nivel = '🔴 Requiere autorización CGR (>30% y ≤50%)';
+      else nivel = '🚫 EXCEDE límite máximo absoluto (>50%)';
+
+      filas = `
+        <tr><td>Monto original</td><td>${fmt(original)}</td></tr>
+        <tr><td>Deductivos vinculados</td><td>${fmt(deductivos)}</td></tr>
+        <tr><td>Adicionales previos</td><td>${fmt(previos)}</td></tr>
+        <tr><td>Neto adicionales acum. tras aprobación</td><td>${fmt(netoNuevo)}</td></tr>
+        <tr><td>Límite 15% (AGA)</td><td>${fmt(original * 0.15)}</td></tr>
+        <tr><td>Límite 30% (Titular)</td><td>${fmt(original * 0.30)}</td></tr>
+        <tr><td>Límite 50% (CGR)</td><td>${fmt(original * 0.50)}</td></tr>
+        <tr><td colspan="2" class="resalta">${nivel}</td></tr>
+      `;
+      if (netoNuevo > original * 0.50) {
+        alertas.push(`<div class="alerta-box roja">🚫 El adicional solicitado haría que el neto adicionales supere el 50% del monto original. Este límite es absoluto (Art. 64.5 Ley).</div>`);
+      }
+    } else {
+      // Consultoría de obra: proporcional a adicionales de la obra
+      const lim = original * 0.25;
+      const disp = lim - previos;
+      const ok = nuevo <= disp;
+      filas = `
+        <tr><td>Monto contrato consultoría</td><td>${fmt(original)}</td></tr>
+        <tr><td>Límite referencial 25%</td><td>${fmt(lim)}</td></tr>
+        <tr><td>Adicionales previos</td><td>${fmt(previos)}</td></tr>
+        <tr><td>Margen disponible</td><td>${fmt(disp)}</td></tr>
+        <tr><td>Adicional solicitado</td><td>${fmt(nuevo)}</td></tr>
+        <tr><td>Estado</td><td class="resalta">${ok ? '✅ Dentro del margen' : '❌ Excede margen'}</td></tr>
+      `;
+      alertas.push(`<div class="alerta-box">ℹ️ El adicional de supervisión está vinculado a los adicionales de la obra. Verifique el Art. 193 del Reglamento.</div>`);
+    }
+
+    mostrarResultado(`
+      <div class="resultado-header">RESULTADO — PRESTACIONES ADICIONALES</div>
+      <div class="resultado-cuerpo">
+        <table class="tabla-resultado"><tbody>${filas}</tbody></table>
+        ${alertas.join('')}
+      </div>
+    `);
+  }
+
+  // ── 3. COMPLEMENTARIA ──
+  function calcComplementaria() {
+    const original = val('comp_original');
+    const nuevo = val('comp_nuevo');
+    if (!original) { alert('Ingresa el monto del contrato original.'); return; }
+    const lim = original * 0.30;
+    const ok = nuevo <= lim;
+    mostrarResultado(`
+      <div class="resultado-header">RESULTADO — CONTRATACIÓN COMPLEMENTARIA</div>
+      <div class="resultado-cuerpo">
+        <div class="resultado-principal">${fmt(lim)}</div>
+        <div class="resultado-label">Tope máximo (30% del contrato original)</div>
+        <div class="detalle-lista">
+          <div class="detalle-item"><span class="dk">Monto contrato original</span><span class="dv">${fmt(original)}</span></div>
+          <div class="detalle-item"><span class="dk">Complementaria solicitada</span><span class="dv">${fmt(nuevo)}</span></div>
+          <div class="detalle-item"><span class="dk">¿Dentro del límite?</span><span class="dv destaca">${ok ? '✅ Sí' : '❌ No — excede el 30%'}</span></div>
+        </div>
+        <div class="alerta-box">
+          📋 Condiciones adicionales (Art. 146):<br>
+          • Debe suscribirse dentro de los 3 meses posteriores a la culminación del plazo de ejecución<br>
+          • Mismo bien o servicio · Mismas condiciones · Contratista preserve condiciones originales<br>
+          • Debe haber convocado procedimiento de selección (salvo que agote la necesidad)
+        </div>
+      </div>
+    `);
+  }
+
+  // ── 4. TOPE PENALIDADES ──
+  function calcTopePenalidades() {
+    const monto = val('tope_monto');
+    const acum = val('tope_acum');
+    const nueva = val('tope_nueva');
+    if (!monto) { alert('Ingresa el monto del contrato.'); return; }
+    const tope = monto * 0.10;
+    const proyectado = acum + nueva;
+    const restante = Math.max(0, tope - acum);
+    const superado = proyectado > tope;
+    const superadoPrevia = acum >= tope;
+
+    mostrarResultado(`
+      <div class="resultado-header">RESULTADO — VERIFICACIÓN DE TOPE</div>
+      <div class="resultado-cuerpo">
+        <div class="resultado-principal">${fmt(tope)}</div>
+        <div class="resultado-label">Tope máximo de penalidades (10% del monto contractual)</div>
+        <div class="detalle-lista">
+          <div class="detalle-item"><span class="dk">Penalidades previas</span><span class="dv">${fmt(acum)}</span></div>
+          <div class="detalle-item"><span class="dk">Nueva penalidad</span><span class="dv">${fmt(nueva)}</span></div>
+          <div class="detalle-item"><span class="dk">Total proyectado</span><span class="dv destaca">${fmt(proyectado)}</span></div>
+          <div class="detalle-item"><span class="dk">Margen disponible</span><span class="dv">${fmt(restante)}</span></div>
+        </div>
+        ${superadoPrevia ? `<div class="alerta-box roja">🚫 El tope ya fue alcanzado con penalidades anteriores. La entidad PUEDE (y en muchos casos DEBE) resolver el contrato.</div>` :
+          superado ? `<div class="alerta-box roja">⚠️ La nueva penalidad haría superar el tope. Aplicar solo ${fmt(restante)} y proceder con resolución de contrato.</div>` :
+          `<div class="alerta-box verde">✅ La nueva penalidad no supera el tope. Saldo disponible: ${fmt(tope - proyectado)}.</div>`}
+      </div>
+    `);
+  }
+
+  // ── 5. GARANTÍA DE FIEL CUMPLIMIENTO ──
+  function calcFielCumplimiento() {
+    const monto = val('gfc_monto');
+    const uitV = val('gfc_uit') || UIT_2025;
+    if (!monto) { alert('Ingresa el monto del contrato.'); return; }
+    const tipo = checkedRadio('tipo_gfc') || 'bs';
+    const mype = checkedRadio('es_mype_gfc') === 'si';
+    const tieneAcc = checkedRadio('tiene_accesoria') === 'si';
+    const montoAcc = val('gfc_monto_acc');
+    const limit50UIT = 50 * uitV;
+
+    let gfc = monto * 0.10;
+    let exento = false;
+    let motivoExento = '';
+
+    if (tipo === 'bs' && monto <= limit50UIT) {
+      exento = true;
+      motivoExento = `El contrato de bienes/servicios es ≤ 50 UIT (${fmt(limit50UIT)}). No requiere garantía de fiel cumplimiento (Art. 139 a)).`;
+    }
+
+    let gfcAcc = tieneAcc && montoAcc ? montoAcc * 0.10 : 0;
+
+    mostrarResultado(`
+      <div class="resultado-header">RESULTADO — GARANTÍA DE FIEL CUMPLIMIENTO</div>
+      <div class="resultado-cuerpo">
+        ${exento
+          ? `<div class="alerta-box verde">✅ <strong>EXENTO</strong> — ${motivoExento}</div>`
+          : `<div class="resultado-principal">${fmt(gfc)}</div>
+             <div class="resultado-label">Garantía de fiel cumplimiento (10% del contrato)</div>`
+        }
+        <div class="detalle-lista">
+          <div class="detalle-item"><span class="dk">Monto contrato original</span><span class="dv">${fmt(monto)}</span></div>
+          <div class="detalle-item"><span class="dk">Porcentaje</span><span class="dv">10%</span></div>
+          ${!exento ? `<div class="detalle-item"><span class="dk">Garantía principal</span><span class="dv destaca">${fmt(gfc)}</span></div>` : ''}
+          ${tieneAcc ? `<div class="detalle-item"><span class="dk">Monto prestación accesoria</span><span class="dv">${fmt(montoAcc)}</span></div>
+          <div class="detalle-item"><span class="dk">Garantía prestación accesoria (10%)</span><span class="dv destaca">${fmt(gfcAcc)}</span></div>
+          <div class="detalle-item"><span class="dk">Total garantías</span><span class="dv destaca">${fmt(gfc + gfcAcc)}</span></div>` : ''}
+        </div>
+        <div class="alerta-box">
+          📋 Vigencia: ${tipo === 'bs' ? 'hasta la conformidad de la prestación' : 'hasta el consentimiento de la liquidación final'}<br>
+          Puede otorgarse como: fideicomiso · carta fianza · contrato de seguro · retención de pago
+        </div>
+      </div>
+    `);
+  }
+
+  // ── 6. ADELANTOS ──
+  function calcAdelantos() {
+    const tipo = selVal('adel_tipo');
+    const monto = val('adel_monto');
+    if (!monto) { alert('Ingresa el monto del contrato.'); return; }
+
+    let filas = '';
+    let nota = '';
+
+    if (tipo === 'obra_sc') {
+      const directo = monto * 0.10;
+      const materiales = monto * 0.20;
+      const avance = monto * 0.10;
+      filas = `
+        <tr><th>Tipo de adelanto</th><th>Tope máximo</th><th>Monto máximo</th></tr>
+        <tr><td>Directo</td><td>10%</td><td class="resalta">${fmt(directo)}</td></tr>
+        <tr><td>Materiales / Insumos / Equip.</td><td>20%</td><td class="resalta">${fmt(materiales)}</td></tr>
+        <tr><td>Por avance (60% avance físico)</td><td>10%</td><td class="resalta">${fmt(avance)}</td></tr>
+        <tr><td><strong>Total máximo posible</strong></td><td><strong>40%</strong></td><td class="resalta"><strong>${fmt(directo+materiales+avance)}</strong></td></tr>
+      `;
+      nota = 'El adelanto por avance requiere avance físico ≥ 60% y que el % real ≥ % programado (Art. 178.5).';
+    } else if (tipo === 'obra_dc_disenio') {
+      const directo = monto * 0.30;
+      filas = `
+        <tr><th>Tipo de adelanto</th><th>Tope máximo</th><th>Monto máximo</th></tr>
+        <tr><td>Directo (componente diseño)</td><td>30%</td><td class="resalta">${fmt(directo)}</td></tr>
+      `;
+    } else if (tipo === 'obra_dc_obra') {
+      const directo = monto * 0.10;
+      const materiales = monto * 0.20;
+      const avance = monto * 0.10;
+      filas = `
+        <tr><th>Tipo de adelanto</th><th>Tope máximo</th><th>Monto máximo</th></tr>
+        <tr><td>Directo (comp. obra)</td><td>10%</td><td class="resalta">${fmt(directo)}</td></tr>
+        <tr><td>Materiales / Insumos / Equip.</td><td>20%</td><td class="resalta">${fmt(materiales)}</td></tr>
+        <tr><td>Por avance</td><td>10%</td><td class="resalta">${fmt(avance)}</td></tr>
+        <tr><td><strong>Total máx. comp. obra</strong></td><td><strong>40%</strong></td><td class="resalta"><strong>${fmt(directo+materiales+avance)}</strong></td></tr>
+      `;
+      nota = 'El monto del componente obra es el aprobado en el expediente técnico.';
+    } else { // co
+      const directo = monto * 0.30;
+      filas = `
+        <tr><th>Tipo de adelanto</th><th>Tope máximo</th><th>Monto máximo</th></tr>
+        <tr><td>Directo (consultoría obra)</td><td>30%</td><td class="resalta">${fmt(directo)}</td></tr>
+      `;
+      nota = 'Para consultoría de obra no procede fideicomiso como garantía de adelanto (Art. 178.2).';
+    }
+
+    mostrarResultado(`
+      <div class="resultado-header">RESULTADO — ADELANTOS DISPONIBLES</div>
+      <div class="resultado-cuerpo">
+        <table class="tabla-resultado"><tbody>${filas}</tbody></table>
+        ${nota ? `<div class="alerta-box" style="margin-top:12px">ℹ️ ${nota}</div>` : ''}
+        <div class="alerta-box" style="margin-top:8px">
+          🔒 Cada adelanto requiere garantía por idéntico monto (Art. 113.3).<br>
+          Amortización: descuentos proporcionales en cada valorización (Art. 180.1).
+        </div>
+      </div>
+    `);
+  }
+
+  // ── 7. GARANTÍA ADELANTO ──
+  function calcGarantiaAdelanto() {
+    const monto = val('gadel_monto');
+    const amort = val('gadel_amort');
+    if (!monto) { alert('Ingresa el monto del adelanto.'); return; }
+    const pendiente = Math.max(0, monto - amort);
+
+    mostrarResultado(`
+      <div class="resultado-header">RESULTADO — GARANTÍA DE ADELANTO</div>
+      <div class="resultado-cuerpo">
+        <div class="resultado-principal">${fmt(monto)}</div>
+        <div class="resultado-label">Garantía inicial (100% del adelanto)</div>
+        <div class="detalle-lista">
+          <div class="detalle-item"><span class="dk">Monto del adelanto</span><span class="dv">${fmt(monto)}</span></div>
+          <div class="detalle-item"><span class="dk">Amortizado</span><span class="dv">${fmt(amort)}</span></div>
+          <div class="detalle-item"><span class="dk">Saldo pendiente amortizar</span><span class="dv destaca">${fmt(pendiente)}</span></div>
+          <div class="detalle-item"><span class="dk">Garantía reducible a</span><span class="dv">${fmt(pendiente)}</span></div>
+        </div>
+        <div class="alerta-box">
+          📋 La garantía puede reducirse a solicitud del contratista hasta el monto pendiente de amortizar (Art. 113.3).<br>
+          Vigencia mínima: 3 meses, renovable hasta amortización total.
+        </div>
+      </div>
+    `);
+  }
+
+  // ── 8. PUNTAJE ECONÓMICO ──
+  function calcPuntajeEco() {
+    const pmax = val('pe_pmax');
+    const mb = val('pe_mb');
+    const mo = val('pe_mo');
+    if (!mb || !mo || !pmax) { alert('Ingresa todos los valores.'); return; }
+    if (mo < mb) { alert('La oferta a evaluar (Mo) no puede ser menor que la oferta más baja (Mb).'); return; }
+    const po = (mb * pmax) / mo;
+
+    mostrarResultado(`
+      <div class="resultado-header">RESULTADO — PUNTAJE ECONÓMICO</div>
+      <div class="resultado-cuerpo">
+        <div class="resultado-principal">${fmtN(po)} pts</div>
+        <div class="resultado-label">Puntaje de la oferta económica evaluada</div>
+        <div class="detalle-lista">
+          <div class="detalle-item"><span class="dk">Fórmula</span><span class="dv">Po = Mb × Pmax / Mo</span></div>
+          <div class="detalle-item"><span class="dk">Oferta más baja (Mb)</span><span class="dv">${fmt(mb)}</span></div>
+          <div class="detalle-item"><span class="dk">Oferta evaluada (Mo)</span><span class="dv">${fmt(mo)}</span></div>
+          <div class="detalle-item"><span class="dk">Puntaje máximo (Pmax)</span><span class="dv">${fmtN(pmax)} pts</span></div>
+          <div class="detalle-item"><span class="dk">Puntaje obtenido</span><span class="dv destaca">${fmtN(po, 4)} pts</span></div>
+          <div class="detalle-item"><span class="dk">Diferencia sobre Mb</span><span class="dv">${fmtPct(((mo-mb)/mb)*100)}</span></div>
+        </div>
+        <div class="alerta-box">
+          ℹ️ El puntaje económico máximo es 40 puntos (salvo licitación pública abreviada para bienes homologados: hasta 70 pts). Art. 75.1.
+        </div>
+      </div>
+    `);
+  }
+
+  // ── 9. PUNTAJE TOTAL ──
+  function calcPuntajeTotal() {
+    const pt = val('pt_tecnico');
+    const pe = val('pt_economico');
+    const c1 = val('pt_c1');
+    const c2 = val('pt_c2');
+    if (Math.abs(c1+c2-1) > 0.001) { alert('C1 + C2 debe ser igual a 1.'); return; }
+    const ptp = c1*pt + c2*pe;
+
+    mostrarResultado(`
+      <div class="resultado-header">RESULTADO — PUNTAJE TOTAL (PTP)</div>
+      <div class="resultado-cuerpo">
+        <div class="resultado-principal">${fmtN(ptp)} pts</div>
+        <div class="resultado-label">Puntaje total ponderado del postor</div>
+        <div class="detalle-lista">
+          <div class="detalle-item"><span class="dk">Fórmula</span><span class="dv">PTP = C1×Pt + C2×Pe</span></div>
+          <div class="detalle-item"><span class="dk">Puntaje técnico (Pt)</span><span class="dv">${fmtN(pt)} × ${fmtN(c1)} = ${fmtN(c1*pt, 4)}</span></div>
+          <div class="detalle-item"><span class="dk">Puntaje económico (Pe)</span><span class="dv">${fmtN(pe)} × ${fmtN(c2)} = ${fmtN(c2*pe, 4)}</span></div>
+          <div class="detalle-item"><span class="dk">PTP final</span><span class="dv destaca">${fmtN(ptp, 4)} pts</span></div>
+        </div>
+      </div>
+    `);
+  }
+
+  // ── 10. BONIFICACIÓN PROVINCIA ──
+  function calcBonificacion() {
+    const tipo = checkedRadio('tipo_bonif') || 'serv';
+    const cuantia = val('bon_cuantia');
+    const puntaje = val('bon_puntaje');
+    const tieneDom = checkedRadio('tiene_dom') === 'si';
+
+    // Límites: servicios/consultoría ≤ 200,000; obras ≤ 900,000
+    const limServ = 200000;
+    const limObra = 900000;
+    const lim = tipo === 'serv' ? limServ : limObra;
+    const cumpleLimite = cuantia <= lim;
+    const aplica = tieneDom && cumpleLimite;
+
+    const bonif = aplica ? puntaje * 0.10 : 0;
+    const puntajeFinal = puntaje + bonif;
+
+    mostrarResultado(`
+      <div class="resultado-header">RESULTADO — BONIFICACIÓN POR PROVINCIA</div>
+      <div class="resultado-cuerpo">
+        <div class="resultado-principal">${aplica ? '+' + fmtN(bonif, 2) + ' pts' : 'No aplica'}</div>
+        <div class="resultado-label">${aplica ? 'Bonificación del 10% sobre puntaje total' : 'Sin bonificación'}</div>
+        <div class="detalle-lista">
+          <div class="detalle-item"><span class="dk">Tipo</span><span class="dv">${tipo === 'serv' ? 'Servicios/Consultoría' : 'Obras'}</span></div>
+          <div class="detalle-item"><span class="dk">Cuantía contrato</span><span class="dv">${fmt(cuantia)}</span></div>
+          <div class="detalle-item"><span class="dk">Límite de cuantía aplicable</span><span class="dv">${fmt(lim)}</span></div>
+          <div class="detalle-item"><span class="dk">Cumple límite de cuantía</span><span class="dv">${cumpleLimite ? '✅ Sí' : '❌ No'}</span></div>
+          <div class="detalle-item"><span class="dk">Tiene domicilio en provincia / colindante</span><span class="dv">${tieneDom ? '✅ Sí' : '❌ No'}</span></div>
+          <div class="detalle-item"><span class="dk">Puntaje sin bonificación</span><span class="dv">${fmtN(puntaje)} pts</span></div>
+          ${aplica ? `<div class="detalle-item"><span class="dk">Puntaje con bonificación</span><span class="dv destaca">${fmtN(puntajeFinal, 4)} pts</span></div>` : ''}
+        </div>
+        ${!cumpleLimite ? `<div class="alerta-box roja">❌ La cuantía del contrato supera el límite para aplicar bonificación provincial.</div>` : ''}
+        ${aplica ? `<div class="alerta-box verde">✅ Aplica bonificación. El domicilio del postor debe constar en su constancia de inscripción RNP.</div>` : ''}
+      </div>
+    `);
+  }
+
+  // ── 11. MULTA TCP ──
+  function calcMultaTCP() {
+    const tipoProv = checkedRadio('tipo_prov') || 'general';
+    const tipoInf = checkedRadio('tipo_inf') || 'abcde';
+    const contrato = val('mt_contrato');
+    const uitV = val('mt_uit') || UIT_2025;
+    const pp = checkedRadio('pronto_pago') === 'si';
+
+    let pctMin, pctMax, uitMin, uitMax, descRango;
+
+    if (tipoProv === 'general') {
+      if (tipoInf === 'abcde') { pctMin=0.03; pctMax=0.06; uitMin=1; uitMax=7; descRango='3%–6% / 1–7 UIT'; }
+      else { pctMin=0.07; pctMax=0.10; uitMin=1; uitMax=15; descRango='7%–10% / 1–15 UIT'; }
+    } else if (tipoProv === 'mype') {
+      if (tipoInf === 'abcde') { pctMin=0.01; pctMax=0.04; uitMin=1; uitMax=3; descRango='1%–4% / 1–3 UIT'; }
+      else { pctMin=0.05; pctMax=0.08; uitMin=1; uitMax=8; descRango='5%–8% / 1–8 UIT'; }
+    } else { // contrato menor
+      pctMin=0.01; pctMax=0.03; uitMin=1; uitMax=3; descRango='1%–3% / 1–3 UIT';
+    }
+
+    const desc = pp ? 0.30 : 0;
+
+    let filas = `
+      <tr><th>Concepto</th><th>Mínimo</th><th>Máximo</th></tr>
+      <tr><td>Sobre oferta/contrato</td><td>${(pctMin*100).toFixed(0)}%</td><td>${(pctMax*100).toFixed(0)}%</td></tr>
+      <tr><td>En soles (% contrato)</td><td class="resalta">${contrato ? fmt(contrato*pctMin) : '—'}</td><td class="resalta">${contrato ? fmt(contrato*pctMax) : '—'}</td></tr>
+      <tr><td>Sin monto conocido (UIT)</td><td>${uitMin} UIT = ${fmt(uitMin*uitV, 0)}</td><td>${uitMax} UIT = ${fmt(uitMax*uitV, 0)}</td></tr>
+    `;
+
+    if (pp) {
+      filas += `
+        <tr><td colspan="3"><strong>Con descuento por pronto pago (30%)</strong></td></tr>
+        ${contrato ? `<tr><td>Multa min. con descuento</td><td colspan="2" class="resalta">${fmt(contrato*pctMin*(1-desc))}</td></tr>
+        <tr><td>Multa max. con descuento</td><td colspan="2" class="resalta">${fmt(contrato*pctMax*(1-desc))}</td></tr>` : ''}
+        <tr><td>Min. UIT con descuento</td><td colspan="2" class="resalta">${fmt(uitMin*uitV*(1-desc), 0)}</td></tr>
+        <tr><td>Max. UIT con descuento</td><td colspan="2" class="resalta">${fmt(uitMax*uitV*(1-desc), 0)}</td></tr>
+      `;
+    }
+
+    mostrarResultado(`
+      <div class="resultado-header">RESULTADO — RANGOS DE MULTA TCP/OECE</div>
+      <div class="resultado-cuerpo">
+        <table class="tabla-resultado"><tbody>${filas}</tbody></table>
+        <div class="alerta-box" style="margin-top:12px">
+          ℹ️ Rango: <strong>${descRango}</strong><br>
+          Tipo: ${tipoProv === 'general' ? 'General' : tipoProv === 'mype' ? 'MYPE' : 'Contrato Menor'} · Infracción: lit. ${tipoInf === 'abcde' ? 'a)–e)' : 'f)–h)'}<br>
+          La multa no puede ser inferior a 1 UIT (${fmt(uitV, 0)}).${pp ? '<br>✅ Descuento por pronto pago: 30% (Art. 89.6).' : ''}
+        </div>
+      </div>
+    `);
+  }
+
+  // ── 12. GARANTÍA APELACIÓN ──
+  function calcGarantiaApelacion() {
+    const esMype = checkedRadio('mype_ap') === 'si';
+    const cuantia = val('ap_cuantia');
+    const uitV = val('ap_uit') || UIT_2025;
+    if (!cuantia) { alert('Ingresa la cuantía del procedimiento.'); return; }
+
+    let garantia, nota;
+    if (!esMype) {
+      garantia = cuantia * 0.03;
+      nota = `General: 3% de la cuantía. No hay tope máximo explícito en la norma vigente (texto vigente desde 01/01/2025).`;
+    } else {
+      const calc = cuantia * 0.005;
+      const tope = 25 * uitV;
+      garantia = Math.min(calc, tope);
+      nota = `MYPE: 0.5% de la cuantía con tope de 25 UIT (${fmt(tope, 0)}). Cálculo: ${fmt(calc)} → aplicado: ${fmt(garantia)}.`;
+    }
+
+    mostrarResultado(`
+      <div class="resultado-header">RESULTADO — GARANTÍA DE APELACIÓN</div>
+      <div class="resultado-cuerpo">
+        <div class="resultado-principal">${fmt(garantia)}</div>
+        <div class="resultado-label">${esMype ? '0.5% de la cuantía (tope 25 UIT)' : '3% de la cuantía del procedimiento'}</div>
+        <div class="detalle-lista">
+          <div class="detalle-item"><span class="dk">Cuantía del procedimiento/ítem</span><span class="dv">${fmt(cuantia)}</span></div>
+          <div class="detalle-item"><span class="dk">Porcentaje aplicable</span><span class="dv">${esMype ? '0.5%' : '3%'}</span></div>
+          ${esMype ? `<div class="detalle-item"><span class="dk">Tope máximo (25 UIT)</span><span class="dv">${fmt(25*uitV, 0)}</span></div>` : ''}
+          <div class="detalle-item"><span class="dk">Garantía a presentar</span><span class="dv destaca">${fmt(garantia)}</span></div>
+        </div>
+        <div class="alerta-box">ℹ️ ${nota}<br>La garantía se presenta ante la entidad contratante o el OECE según corresponda.</div>
+      </div>
+    `);
+  }
+
+  // ── 13. INTERESES MORA ──
+  function calcIntereses() {
+    const monto = val('int_monto');
+    const tasa = val('int_tasa');
+    const dias = val('int_dias');
+    if (!monto || !tasa || !dias) { alert('Ingresa todos los valores.'); return; }
+    const intDiario = monto * (tasa/100) / 365;
+    const total = intDiario * dias;
+
+    mostrarResultado(`
+      <div class="resultado-header">RESULTADO — INTERESES POR PAGO TARDÍO</div>
+      <div class="resultado-cuerpo">
+        <div class="resultado-principal">${fmt(total)}</div>
+        <div class="resultado-label">Intereses legales generados</div>
+        <div class="detalle-lista">
+          <div class="detalle-item"><span class="dk">Monto principal impago</span><span class="dv">${fmt(monto)}</span></div>
+          <div class="detalle-item"><span class="dk">Tasa legal anual</span><span class="dv">${fmtN(tasa)}% anual</span></div>
+          <div class="detalle-item"><span class="dk">Días de demora</span><span class="dv">${dias} días</span></div>
+          <div class="detalle-item"><span class="dk">Interés diario</span><span class="dv">${fmt(intDiario, 4)}</span></div>
+          <div class="detalle-item"><span class="dk">Total intereses</span><span class="dv destaca">${fmt(total)}</span></div>
+          <div class="detalle-item"><span class="dk">Total a pagar (principal + intereses)</span><span class="dv destaca">${fmt(monto + total)}</span></div>
+        </div>
+        <div class="alerta-box roja">⚠️ Estos intereses son reconocidos al contratista por parte de la entidad (Art. 67.5 Ley 32069). La entidad repite contra los responsables de la demora. Consulte la tasa vigente en <strong>bcrp.gob.pe</strong>.</div>
+      </div>
+    `);
+  }
+
+  // ── 14. SUPERVISOR MORA ──
+  function calcSupervisorMora() {
+    const mensual = val('sup_mensual');
+    const meses = val('sup_meses');
+    if (!mensual) { alert('Ingresa el monto mensual de la supervisión.'); return; }
+    const total = mensual * meses;
+    mostrarResultado(`
+      <div class="resultado-header">RESULTADO — COSTO SUPERVISOR POR MORA</div>
+      <div class="resultado-cuerpo">
+        <div class="resultado-principal">${fmt(total)}</div>
+        <div class="resultado-label">Monto que el ejecutor asume por extensión de supervisión</div>
+        <div class="detalle-lista">
+          <div class="detalle-item"><span class="dk">Costo mensual supervisión</span><span class="dv">${fmt(mensual)}</span></div>
+          <div class="detalle-item"><span class="dk">Meses adicionales por mora</span><span class="dv">${meses}</span></div>
+          <div class="detalle-item"><span class="dk">Total a deducir de valorizaciones</span><span class="dv destaca">${fmt(total)}</span></div>
+        </div>
+        <div class="alerta-box">ℹ️ Art. 210.5: La entidad puede asumir provisionalmente dichos costos durante la ejecución y luego deducirlos de las valorizaciones y/o liquidación del contrato de obra.</div>
+      </div>
+    `);
+  }
+
+  // ── 15. RESOLUCIÓN OBRA ──
+  function calcResolucion() {
+    const parte = checkedRadio('res_parte') || 'contratista';
+    const original = val('res_original');
+    const avance = val('res_avance');
+    const utilidadPct = val('res_utilidad');
+    if (!original) { alert('Ingresa el monto del contrato original.'); return; }
+
+    const ejecutado = original * (avance/100);
+    const saldo = original - ejecutado;
+    const utilidadSaldo = saldo * (utilidadPct/100);
+    const cincuentaUtilidad = utilidadSaldo * 0.50;
+
+    mostrarResultado(`
+      <div class="resultado-header">RESULTADO — EFECTOS DE RESOLUCIÓN DE OBRA</div>
+      <div class="resultado-cuerpo">
+        <div class="detalle-lista">
+          <div class="detalle-item"><span class="dk">Monto original</span><span class="dv">${fmt(original)}</span></div>
+          <div class="detalle-item"><span class="dk">% avance ejecutado</span><span class="dv">${avance}%</span></div>
+          <div class="detalle-item"><span class="dk">Monto ejecutado (pagar al contratista)</span><span class="dv destaca">${fmt(ejecutado)}</span></div>
+          <div class="detalle-item"><span class="dk">Saldo de obra no ejecutado</span><span class="dv">${fmt(saldo)}</span></div>
+          ${parte === 'entidad' ? `
+          <div class="detalle-item"><span class="dk">Utilidad pactada (%)</span><span class="dv">${utilidadPct}%</span></div>
+          <div class="detalle-item"><span class="dk">Utilidad sobre saldo no ejecutado</span><span class="dv">${fmt(utilidadSaldo)}</span></div>
+          <div class="detalle-item"><span class="dk">50% de utilidad prevista (Art. 123 Rgto.)</span><span class="dv destaca">${fmt(cincuentaUtilidad)}</span></div>
+          ` : ''}
+        </div>
+        ${parte === 'entidad'
+          ? `<div class="alerta-box verde">📋 Resolución por causa atribuible a la entidad: se paga la obra ejecutada + 50% de la utilidad sobre el saldo no ejecutado, actualizado con fórmulas de reajuste (Art. 123 Rgto.).<br>Total estimado: ${fmt(ejecutado + cincuentaUtilidad)}</div>`
+          : `<div class="alerta-box roja">📋 Resolución por incumplimiento del contratista: se paga solo la obra ejecutada a la fecha de resolución. Se ejecutan las garantías correspondientes.</div>`
+        }
+      </div>
+    `);
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  KONAMI CODE EASTER EGG
+  // ═══════════════════════════════════════════════════
+  const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let kIdx = 0;
+  function initKonami() {
+    document.addEventListener('keydown', function kListener(e) {
+      if (e.key === konami[kIdx]) { kIdx++; }
+      else { kIdx = 0; }
+      if (kIdx === konami.length) {
+        kIdx = 0;
+        document.getElementById('easter').style.display = 'block';
+        document.getElementById('easter').style.color = 'var(--dorado)';
+        setTimeout(() => {
+          document.getElementById('easter').style.display = 'none';
+        }, 5000);
+      }
+    });
+  }
+  initKonami();
+
+  // ── SW Registration ──
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>

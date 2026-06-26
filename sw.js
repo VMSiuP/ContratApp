@@ -2,7 +2,7 @@
 // Ley 32069 + DS 009-2025-EF
 // VMSiuP / Víctor Siu — Para Cindy, Andrés y Abril
 
-const CACHE = 'contratapp-v1';
+const CACHE = 'contratapp-v2';
 const ASSETS = [
   './',
   './index.html',

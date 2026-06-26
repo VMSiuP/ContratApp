@@ -1,0 +1,140 @@
+<svg width="512" height="512" viewBox="0 0 512 512" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>ContratApp icon</title>
+  <desc>Logo de ContratApp: escudo institucional rojo y dorado con letras CA</desc>
+
+  <defs>
+    <style>
+      .dot { fill: #9B1010; }
+      .corner { fill: none; stroke: #C8A84B; stroke-width: 1.2; opacity: 0.5; }
+    </style>
+  </defs>
+
+  <!-- Fondo -->
+  <rect width="512" height="512" rx="60" fill="#6B0000"/>
+
+  <!-- Textura de puntos perimetral -->
+  <g opacity="0.25">
+    <rect x="44" y="44" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="74" y="44" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="104" y="44" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="134" y="44" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="164" y="44" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="194" y="44" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="224" y="44" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="254" y="44" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="284" y="44" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="314" y="44" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="344" y="44" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="374" y="44" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="404" y="44" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="434" y="44" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="464" y="44" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="44" y="464" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="74" y="464" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="104" y="464" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="134" y="464" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="164" y="464" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="194" y="464" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="224" y="464" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="254" y="464" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="284" y="464" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="314" y="464" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="344" y="464" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="374" y="464" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="404" y="464" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="434" y="464" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="464" y="464" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="44" y="74" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="464" y="74" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="44" y="104" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="464" y="104" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="44" y="134" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="464" y="134" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="44" y="164" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="464" y="164" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="44" y="194" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="464" y="194" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="44" y="224" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="464" y="224" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="44" y="254" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="464" y="254" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="44" y="284" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="464" y="284" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="44" y="314" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="464" y="314" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="44" y="344" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="464" y="344" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="44" y="374" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="464" y="374" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="44" y="404" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="464" y="404" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="44" y="434" width="5" height="5" rx="2.5" class="dot"/>
+    <rect x="464" y="434" width="5" height="5" rx="2.5" class="dot"/>
+  </g>
+
+  <!-- Líneas doradas horizontales -->
+  <line x1="60" y1="82" x2="452" y2="82" stroke="#C8A84B" stroke-width="1.2" opacity="0.6"/>
+  <line x1="60" y1="430" x2="452" y2="430" stroke="#C8A84B" stroke-width="1.2" opacity="0.6"/>
+
+  <!-- Sombra del escudo -->
+  <path d="M256 108 L392 150 L392 278 Q392 354 256 406 Q120 354 120 278 L120 150 Z"
+        fill="#4A0000" opacity="0.6" transform="translate(3,5)"/>
+
+  <!-- Cuerpo del escudo -->
+  <path d="M256 108 L392 150 L392 278 Q392 354 256 406 Q120 354 120 278 L120 150 Z"
+        fill="#8B0000"/>
+
+  <!-- Borde exterior dorado del escudo -->
+  <path d="M256 108 L392 150 L392 278 Q392 354 256 406 Q120 354 120 278 L120 150 Z"
+        fill="none" stroke="#C8A84B" stroke-width="4"/>
+
+  <!-- Borde interior dorado del escudo -->
+  <path d="M256 122 L380 161 L380 276 Q380 344 256 392 Q132 344 132 276 L132 161 Z"
+        fill="none" stroke="#C8A84B" stroke-width="1.2" opacity="0.45"/>
+
+  <!-- División horizontal interior -->
+  <line x1="132" y1="234" x2="380" y2="234" stroke="#C8A84B" stroke-width="1.2" opacity="0.35"/>
+
+  <!-- Letra C -->
+  <text x="200" y="318"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="144"
+        font-weight="700"
+        fill="#C8A84B"
+        text-anchor="middle">C</text>
+
+  <!-- Letra A -->
+  <text x="314" y="318"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="144"
+        font-weight="700"
+        fill="#DFC070"
+        text-anchor="middle">A</text>
+
+  <!-- Estrella en el pináculo -->
+  <polygon points="256,92 260,104 272,104 263,111 266,123 256,116 246,123 249,111 240,104 252,104"
+           fill="#C8A84B"/>
+
+  <!-- Texto ContratApp -->
+  <text x="256" y="458"
+        font-family="'Segoe UI', Arial, sans-serif"
+        font-size="33"
+        font-weight="700"
+        fill="#C8A84B"
+        text-anchor="middle"
+        letter-spacing="1.5">Contrat<tspan fill="#DFC070">App</tspan></text>
+
+  <!-- Líneas laterales del texto -->
+  <line x1="60" y1="446" x2="118" y2="446" stroke="#C8A84B" stroke-width="1.2" opacity="0.6"/>
+  <line x1="394" y1="446" x2="452" y2="446" stroke="#C8A84B" stroke-width="1.2" opacity="0.6"/>
+
+  <!-- Rombos decorativos -->
+  <polygon points="128,446 134,440 140,446 134,452" fill="#C8A84B" opacity="0.8"/>
+  <polygon points="372,446 378,440 384,446 378,452" fill="#C8A84B" opacity="0.8"/>
+
+  <!-- Esquinas decorativas -->
+  <path d="M60 60 L60 82 M60 60 L82 60" class="corner"/>
+  <path d="M452 60 L452 82 M452 60 L430 60" class="corner"/>
+  <path d="M60 452 L60 430 M60 452 L82 452" class="corner"/>
+  <path d="M452 452 L452 430 M452 452 L430 452" class="corner"/>
+</svg>

@@ -20,21 +20,21 @@
   "screenshots": [
     {
       "src": "screenshots/menu.png",
-      "sizes": "1080x1920",
+      "sizes": "1080x2400",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Menú principal de ContratApp"
     },
     {
       "src": "screenshots/penalidad.png",
-      "sizes": "1080x1920",
+      "sizes": "1080x2400",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Calculadora de penalidad por mora"
     },
     {
       "src": "screenshots/adicionales.png",
-      "sizes": "1080x1920",
+      "sizes": "1080x2400",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Verificador de prestaciones adicionales"

@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.vmsiup.twa",
+        "sha256_cert_fingerprints": ["AA:C9:BE:C9:39:AE:7F:4E:A9:61:1B:24:56:F4:97:06:B6:3D:49:29:94:05:53:C8:0A:C3:05:25:1D:68:A2:30"]
+      }
+    }]

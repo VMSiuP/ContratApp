@@ -1489,6 +1489,15 @@
       navigator.serviceWorker.register('./sw.js').catch(() => {});
     });
   }
+
+  // ── Deep-link: abrir módulo directo desde shortcuts del manifest ──
+  (function() {
+    const params = new URLSearchParams(window.location.search);
+    const moduloDirecto = params.get('modulo');
+    if (moduloDirecto) {
+      abrirModulo(moduloDirecto);
+    }
+  })();
 </script>
 </body>
 </html>

@@ -50,5 +50,31 @@
       "form_factor": "wide",
       "label": "ContratApp en escritorio"
     }
-  ]
+  ],
+  "shortcuts": [
+    {
+      "name": "Penalidad por Mora",
+      "short_name": "Penalidad",
+      "description": "Calcular penalidad diaria por mora — Art. 120 Rgto.",
+      "url": "./index.html?modulo=penalidad",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Garantía de Fiel Cumplimiento",
+      "short_name": "Garantía",
+      "description": "Calcular garantía de fiel cumplimiento — Art. 113.1",
+      "url": "./index.html?modulo=fiel-cumplimiento",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Multa TCP / OECE",
+      "short_name": "Multa TCP",
+      "description": "Ver rangos de multa TCP/OECE — Art. 89 Ley",
+      "url": "./index.html?modulo=multa-tcp",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  }
 }

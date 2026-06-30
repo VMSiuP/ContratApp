@@ -1,17 +1,43 @@
 {
+  "id": "/ContratApp/",
   "name": "ContratApp — Calculadora de Contrataciones Públicas",
   "short_name": "ContratApp",
-  "description": "Calculadora integral para la Ley 32069 y DS 009-2025-EF",
+  "description": "Calculadora integral para la Ley 32069 y DS 009-2025-EF. Penalidades, garantías, adelantos, evaluación de ofertas, multas TCP y más.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#6B0000",
   "theme_color": "#8B0000",
   "orientation": "portrait-primary",
+  "lang": "es-PE",
+  "categories": ["productivity", "utilities"],
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+  "prefer_related_applications": false,
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
     { "src": "icon-contratapp.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
   ],
-  "categories": ["productivity", "utilities"],
-  "lang": "es-PE"
+  "screenshots": [
+    {
+      "src": "screenshots/menu.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Menú principal de ContratApp"
+    },
+    {
+      "src": "screenshots/penalidad.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Calculadora de penalidad por mora"
+    },
+    {
+      "src": "screenshots/adicionales.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Verificador de prestaciones adicionales"
+    }
+  ]
 }

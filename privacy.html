@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Política de privacidad de ContratApp — Calculadora de Contrataciones Públicas">
+  <meta name="theme-color" content="#8B0000">
+  <title>Política de Privacidad — ContratApp</title>
+  <style>
+    :root {
+      --rojo: #8B0000;
+      --rojo-oscuro: #6B0000;
+      --dorado: #C8A84B;
+      --dorado-claro: #DFC070;
+      --crema: #FDF8F0;
+      --gris-fondo: #F5F3EE;
+      --gris-borde: #E0D8CC;
+      --gris-texto: #333;
+      --gris-suave: #666;
+      --negro: #1A1008;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--gris-fondo);
+      color: var(--gris-texto);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── CABECERA ── */
+    header {
+      background: linear-gradient(135deg, var(--rojo-oscuro) 0%, var(--rojo) 100%);
+      color: white;
+      padding: 20px 24px 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    }
+
+    .logo-marca {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+    .logo-marca span { color: var(--dorado-claro); }
+
+    .subtitulo-app {
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.7);
+      margin-top: 2px;
+    }
+
+    .ley-badge {
+      margin-left: auto;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(200,168,75,0.5);
+      color: var(--dorado-claro);
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+    }
+
+    /* ── CONTENIDO ── */
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 32px 24px 60px;
+      flex: 1;
+    }
+
+    /* ── HÉROE ── */
+    .hero {
+      background: white;
+      border-radius: 12px;
+      padding: 32px 28px 28px;
+      margin-bottom: 24px;
+      border-left: 4px solid var(--dorado);
+      box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '🔒';
+      position: absolute;
+      right: 24px;
+      top: 24px;
+      font-size: 2.4rem;
+      opacity: 0.12;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--dorado);
+      margin-bottom: 8px;
+    }
+
+    .hero h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--rojo);
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .hero-resumen {
+      font-size: 0.95rem;
+      color: var(--gris-suave);
+      line-height: 1.6;
+    }
+
+    .hero-resumen strong {
+      color: var(--negro);
+    }
+
+    /* ── DECLARACIÓN PRINCIPAL ── */
+    .declaracion {
+      background: linear-gradient(135deg, var(--rojo-oscuro), var(--rojo));
+      color: white;
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 12px rgba(139,0,0,0.2);
+    }
+
+    .declaracion p {
+      font-size: 1.05rem;
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    .declaracion strong {
+      color: var(--dorado-claro);
+      font-weight: 700;
+    }
+
+    /* ── SECCIONES ── */
+    .seccion {
+      background: white;
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .seccion-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--gris-borde);
+    }
+
+    .seccion-icono {
+      width: 36px;
+      height: 36px;
+      background: var(--gris-fondo);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .seccion h2 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--rojo);
+    }
+
+    .seccion p, .seccion li {
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: var(--gris-texto);
+    }
+
+    .seccion ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .seccion ul li {
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .seccion ul li::before {
+      content: '·';
+      position: absolute;
+      left: 6px;
+      color: var(--dorado);
+      font-weight: 900;
+      font-size: 1.1rem;
+      line-height: 1.5;
+    }
+
+    .seccion p + p { margin-top: 10px; }
+
+    /* ── CHIP VERDE ── */
+    .chip-ok {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #E8F5E9;
+      color: #1B5E20;
+      border: 1px solid #A5D6A7;
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      margin-top: 10px;
+    }
+
+    /* ── FECHA ── */
+    .meta {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--gris-suave);
+      margin-top: 8px;
+      padding: 0 24px;
+    }
+
+    .meta a {
+      color: var(--rojo);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--rojo-oscuro);
+      color: rgba(255,255,255,0.55);
+      text-align: center;
+      padding: 16px 20px;
+      font-size: 0.65rem;
+    }
+
+    footer strong { color: var(--dorado); }
+
+    @media (max-width: 480px) {
+      main { padding: 20px 16px 48px; }
+      .hero, .declaracion, .seccion { padding: 20px 18px; }
+      .hero h1 { font-size: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <a href="./index.html" class="logo-marca">Contrat<span>App</span></a>
+    <div class="subtitulo-app">Calculadora Integral de Contrataciones</div>
+  </div>
+  <div class="ley-badge">Ley 32069 · DS 009-2025-EF</div>
+</header>
+
+<main>
+
+  <div class="hero">
+    <div class="hero-eyebrow">Documento legal</div>
+    <h1>Política de Privacidad</h1>
+    <p class="hero-resumen">
+      Esta política describe cómo <strong>ContratApp</strong> maneja la información
+      de quienes la utilizan. La lectura es breve porque hay muy poco que decir:
+      esta aplicación <strong>no recopila, almacena ni transmite ningún dato personal</strong>.
+    </p>
+  </div>
+
+  <div class="declaracion">
+    <p>
+      <strong>ContratApp no accede a sus datos personales.</strong> Todos los cálculos
+      se ejecutan directamente en su dispositivo, sin conexión a servidores externos,
+      sin cuentas de usuario, sin cookies de seguimiento y sin analítica de comportamiento.
+      Lo que ingresa en la aplicación <strong>nunca sale de su teléfono</strong>.
+    </p>
+  </div>
+
+  <div class="seccion">
+    <div class="seccion-header">
+      <div class="seccion-icono">📵</div>
+      <h2>Datos que ContratApp NO recopila</h2>
+    </div>
+    <ul>
+      <li>Nombre, correo electrónico, teléfono ni ningún dato de identificación personal</li>
+      <li>Ubicación geográfica ni dirección IP</li>
+      <li>Datos financieros o contractuales ingresados en los formularios de cálculo</li>
+      <li>Historial de uso, módulos visitados ni frecuencia de uso</li>
+      <li>Información del dispositivo (modelo, sistema operativo, identificadores)</li>
+      <li>Cookies, identificadores de publicidad ni tecnologías de seguimiento</li>
+    </ul>
+    <div class="chip-ok">✅ Cero datos recopilados</div>
+  </div>
+
+  <div class="seccion">
+    <div class="seccion-header">
+      <div class="seccion-icono">📱</div>
+      <h2>Funcionamiento local en el dispositivo</h2>
+    </div>
+    <p>
+      ContratApp es una <strong>Progressive Web App (PWA)</strong> que opera completamente
+      en el navegador de su dispositivo. Los cálculos de penalidades, garantías, adelantos,
+      puntajes de evaluación y demás módulos se procesan mediante código JavaScript que
+      se ejecuta localmente, sin enviar ninguna consulta a servidores externos.
+    </p>
+    <p>
+      La aplicación puede funcionar <strong>sin conexión a internet</strong> una vez
+      descargada, gracias a su caché de Service Worker. Incluso en ese modo sin conexión,
+      no se genera ni almacena ningún dato personal.
+    </p>
+  </div>
+
+  <div class="seccion">
+    <div class="seccion-header">
+      <div class="seccion-icono">🌐</div>
+      <h2>Conexión a internet</h2>
+    </div>
+    <p>
+      La primera vez que accede a ContratApp, su dispositivo descarga los archivos
+      de la aplicación desde GitHub Pages (<code>vmsiup.github.io</code>).
+      Esta descarga es técnicamente necesaria para instalar la app y no implica
+      el envío de ningún dato personal.
+    </p>
+    <p>
+      GitHub Pages puede registrar datos técnicos estándar de las solicitudes HTTP
+      (como la dirección IP del solicitante) de acuerdo con su propia política de
+      privacidad, sobre la cual el desarrollador de ContratApp no tiene control.
+      Puede consultar la política de privacidad de GitHub en
+      <a href="https://docs.github.com/es/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">docs.github.com</a>.
+    </p>
+  </div>
+
+  <div class="seccion">
+    <div class="seccion-header">
+      <div class="seccion-icono">👶</div>
+      <h2>Menores de edad</h2>
+    </div>
+    <p>
+      ContratApp es una herramienta de uso profesional dirigida a personas adultas
+      que trabajan en contrataciones públicas. No está diseñada para ser utilizada
+      por menores de edad, ni recopila información de ninguna persona,
+      independientemente de su edad.
+    </p>
+  </div>
+
+  <div class="seccion">
+    <div class="seccion-header">
+      <div class="seccion-icono">✏️</div>
+      <h2>Cambios a esta política</h2>
+    </div>
+    <p>
+      Si en el futuro se introdujeran funcionalidades que impliquen el procesamiento
+      de datos personales, esta política será actualizada con anticipación y se
+      notificará a los usuarios a través de la propia aplicación. La versión vigente
+      estará siempre disponible en esta página.
+    </p>
+  </div>
+
+  <div class="seccion">
+    <div class="seccion-header">
+      <div class="seccion-icono">✉️</div>
+      <h2>Contacto</h2>
+    </div>
+    <p>
+      Si tiene preguntas sobre esta política de privacidad puede escribir al
+      desarrollador de ContratApp: <strong>Víctor M. Siu P.</strong><br>
+      Piura, Perú.
+    </p>
+  </div>
+
+  <p class="meta">
+    Versión 1.0 · Vigente desde julio de 2025 ·
+    <a href="./index.html">← Volver a ContratApp</a>
+  </p>
+
+</main>
+
+<footer>
+  <strong>ContratApp</strong> · Ley General de Contrataciones Públicas Nº 32069 · DS 009-2025-EF<br>
+  Desarrollado por Víctor M. Siu P. · Piura, Perú
+</footer>
+
+</body>
+</html>
